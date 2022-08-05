@@ -1,0 +1,114 @@
+local library = loadstring(game:HttpGet(("https://raw.githubusercontent.com/508droid/AikaV3rm-UI-Lib/main/Lib.lua")))()
+
+local w = library:CreateWindow("Astro Hub") -- Creates the window
+
+local Farming = w:CreateFolder("Farming")
+
+local petStuff = w:CreateFolder("Pet") -- Creates the folder(U will put here your buttons,etc)
+
+local Player = w:CreateFolder("LocalPlayer")
+
+local Misc = w:CreateFolder("Misc")
+
+_G.SliderColor = Color3.fromRGB(255,255,255)
+_G.ButtonColor = Color3.fromRGB(255,255,255)
+_G.ToggleColor = Color3.fromRGB(255,255,255)
+_G.ArrowColor = Color3.fromRGB(255,255,255)
+_G.MainTextColor = Color3.fromRGB(255,255,255)
+_G.PointerColor = Color3.fromRGB(255,255,255)
+_G.DraggerCircleColor = Color3.fromRGB(255,255,255)
+
+Farming:Toggle("AutoClicker",function(t)
+getgenv().autoclicker = t
+end)
+
+Farming:Box("Rebirth No. based on upgrade", "String",function(t)
+    getgenv().rebirthamount = t
+end)
+
+petStuff:Label("No animation , Opens 3 eggs , Cap Sensetive",{
+    TextSize = 15; -- Self Explaining
+    TextColor = Color3.fromRGB(255,255,255); -- Self Explanatory
+    BgColor = Color3.fromRGB(69,69,69); -- Self Explanatory
+ })
+
+petStuff:Toggle("Auto Hatch",function(t)
+getgenv().autoegg = t
+end)
+
+petStuff:Box("Type Egg Type", "String",function(t)
+    getgenv().EggType = t
+end)
+
+
+petStuff:Toggle("Auto Equip Best Pets",function(t)
+getgenv().autoequipbest = t
+end)
+
+
+
+Farming:Toggle("Auto Rebirth",function(t)
+getgenv().autoreb = t
+end)
+
+Player:Slider("WalkSpeed",{ min = 0; max = 250; precise = true;},function(t)
+    while t do wait()
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+end
+end)
+
+Player:Slider("JumpPower",{ min = 0; max = 250; precise = true;},function(t)
+    while t do wait()
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
+end
+end)
+
+
+Misc:DestroyGui()
+
+Misc:Label("Astro#5852",{
+   TextSize = 25; -- Self Explaining
+   TextColor = Color3.fromRGB(255,255,255); -- Self Explanatory
+   BgColor = Color3.fromRGB(69,69,69); -- Self Explanatory
+})
+
+
+
+spawn(function ()
+while task.wait() do 
+    if getgenv().autoreb == true then
+        local args = {
+            [1] = rebirthamount
+        }
+        game:GetService("ReplicatedStorage").Remotes.Rebirth:FireServer(unpack(args))
+            end
+        end
+    end)
+
+
+spawn(function()
+while task.wait() do
+    if getgenv().autoclicker == true then
+        game:GetService("ReplicatedStorage").Remotes.Tap:FireServer()
+        end
+    end
+end)
+
+spawn(function()
+    while task.wait() do
+     if getgenv().autoegg == true then
+        local args = { [1] = getgenv().EggType, [2] = 3  }
+        game:GetService("ReplicatedStorage").Remotes.BuyEgg:InvokeServer(unpack(args))  
+        wait()
+        end
+    end
+end)
+
+
+spawn(function ()
+while task.wait() do
+    if getgenv().autoequipbest == true then
+        game:GetService("ReplicatedStorage").Remotes.EquipBest:InvokeServer()
+        end
+    end
+end)
